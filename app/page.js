@@ -50,7 +50,7 @@ export const testimonials = [
   {
     name: "Kiran Makam",
     company: "Radboards Pvt Ltd.",
-    feedback: "Vamshi's UI/UX designs elevated our app's usability and visual appeal significantly.",
+    feedback: "Vamshi&rsquo;ss UI/UX designs elevated our app's usability and visual appeal significantly.",
     avatar: "/" // Replace with actual avatar path
   },
   {
@@ -638,7 +638,7 @@ export default function Portfolio() {
       <footer className={`py-8 px-6 ${darkMode ? 'bg-gray-800 text-gray-400' : 'bg-gray-100 text-gray-600'}`}>
         <div className="container mx-auto text-center">
           <p className="mb-4">
-            © {new Date().getFullYear()} D U VAMSHI. All rights reserved.
+             {new Date().getFullYear()} D U VAMSHI. All rights reserved.
           </p>
           <p>
             Designed and built with ❤️ 
