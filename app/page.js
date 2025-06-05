@@ -450,7 +450,7 @@ export default function Portfolio() {
       Client Testimonials
     </h2>
     <p className="text-xl text-center max-w-2xl mx-auto mb-16 text-gray-400">
-      Here's what some of my clients have to say about working with me.
+      Here&apos;s what some of my clients have to say about working with me.
     </p>
 
     <div className="flex flex-col items-center gap-12 md:flex-row md:justify-center">
