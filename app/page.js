@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from 'next/image';
+import Hero from "@/components/Hero";
 
 
 export const projects = [
@@ -179,6 +180,8 @@ export default function Portfolio() {
   const resetTilt = (e) => {
     e.currentTarget.style.transform = "perspective(600px) rotateX(0deg) rotateY(0deg) scale(1)";
   };
+  const [menuOpen, setMenuOpen] = useState(false);
+
 
   
   if (!mounted) return null;
@@ -190,26 +193,43 @@ export default function Portfolio() {
   style={{
     position: 'fixed',
     top: '20px',
-    left: '132px',
-    width: '1200px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: '90%',
+    maxWidth: '1200px',
     borderRadius: '20px',
     zIndex: 50,
     backdropFilter: 'blur(12px)',
-    backgroundColor: darkMode ? 'rgba(45, 55, 72, 0.85)' : 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: darkMode
+      ? 'rgba(45, 55, 72, 0.85)'
+      : 'rgba(255, 255, 255, 0.8)',
     boxShadow: darkMode
       ? '0 4px 12px rgba(0,0,0,0.6)'
       : '0 4px 12px rgba(0,0,0,0.1)',
-    border: darkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.05)',
+    border: darkMode
+      ? '1px solid rgba(255,255,255,0.1)'
+      : '1px solid rgba(0,0,0,0.05)',
   }}
 >
-  <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+  <div className="container mx-auto px-4 py-4 flex justify-between items-center relative">
+
+    {/* Brand */}
     <div 
-      className="text-2xl font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-teal-400 cursor-pointer"
+      className="text-xl sm:text-2xl font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-teal-400 cursor-pointer"
       onClick={() => handleScrollTo('home')}
     >
       D U VAMSHI
     </div>
 
+    {/* Hamburger (Mobile Only) */}
+    <div 
+      className="md:hidden text-2xl text-blue-500 cursor-pointer z-50"
+      onClick={() => setMenuOpen(!menuOpen)}
+    >
+      {menuOpen ? '✖' : '☰'}
+    </div>
+
+    {/* Desktop Nav */}
     <nav className="hidden md:flex gap-8 relative">
       {['home', 'projects', 'about', 'testimonials', 'contact'].map((section) => (
         <div
@@ -230,9 +250,10 @@ export default function Portfolio() {
       ))}
     </nav>
 
+    {/* Dark Mode Button */}
     <button
       onClick={toggleDarkMode}
-      className={`px-4 py-2 rounded-full text-sm font-medium shadow-md transition-all duration-300 
+      className={`hidden md:block px-4 py-2 rounded-full text-sm font-medium shadow-md transition-all duration-300 
         ${darkMode 
           ? 'bg-gray-700 text-gray-100 hover:bg-gray-600' 
           : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
@@ -240,55 +261,105 @@ export default function Portfolio() {
       {darkMode ? 'Light Mode' : 'Dark Mode'}
     </button>
   </div>
+
+  {/* Mobile Nav (Dropdown) */}
+  {menuOpen && (
+    <div className={`md:hidden w-full px-6 pb-4 transition-all duration-300`}>
+      <div className="flex flex-col gap-4 mt-4 items-center text-center">
+        {['home', 'projects', 'about', 'testimonials', 'contact'].map((section) => (
+          <div
+            key={section}
+            onClick={() => {
+              handleScrollTo(section);
+              setMenuOpen(false);
+            }}
+            className={`uppercase text-sm font-semibold cursor-pointer tracking-wider transition-all duration-300 
+              ${activeSection === section 
+                ? (darkMode ? 'text-blue-400' : 'text-blue-600') 
+                : (darkMode ? 'text-gray-300' : 'text-gray-600')}
+              hover:text-blue-500`}
+          >
+            {section}
+          </div>
+        ))}
+
+        {/* Mobile Dark Mode Toggle */}
+        <button
+          onClick={toggleDarkMode}
+          className={`mt-2 px-4 py-2 rounded-full text-sm font-medium shadow-md transition-all duration-300 
+            ${darkMode 
+              ? 'bg-gray-700 text-gray-100 hover:bg-gray-600' 
+              : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+        >
+          {darkMode ? 'Light Mode' : 'Dark Mode'}
+        </button>
+      </div>
+    </div>
+  )}
 </header>
+
+
+
+
 
 
       {/* Hero Section */}
       <section 
   id="home" 
-  className={`min-h-screen flex flex-col justify-center items-center text-center px-6 pt-16 relative overflow-hidden ${
+  className={`min-h-screen flex flex-col justify-center items-center text-center px-6 pt-24 relative overflow-hidden ${
     darkMode 
       ? 'bg-gradient-to-br from-gray-900 via-blue-950 to-black' 
-      : 'bg-gradient-to-br from-blue-100 via-white to-black-200'
+      : 'bg-gradient-to-br from-blue-100 via-white to-gray-100'
   }`}
 >
-  {/* Animated Floating Circles */}
-  <div className="absolute inset-0 overflow-hidden z-0">
+  {/* Floating Circles */}
+  <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
     {[...Array(25)].map((_, i) => {
-      const size = Math.random() * 80 + 40
+      const size = Math.random() * 80 + 40;
+      const colors = [
+        darkMode ? 'bg-blue-800' : 'bg-blue-300',
+        darkMode ? 'bg-purple-700' : 'bg-pink-300',
+        darkMode ? 'bg-teal-700' : 'bg-yellow-300'
+      ];
+      const color = colors[Math.floor(Math.random() * colors.length)];
       return (
         <div 
           key={i}
-          className={`absolute rounded-full filter blur-2xl opacity-40 ${darkMode ? 'bg-blue-800' : 'bg-blue-300'}`}
+          className={`absolute rounded-full filter blur-2xl opacity-20 ${color}`}
           style={{
             width: `${size}px`,
             height: `${size}px`,
             top: `${Math.random() * 100}%`,
             left: `${Math.random() * 100}%`,
-            animation: `float ${Math.random() * 4 + 6}s infinite ease-in-out`,
+            animation: `float ${Math.random() * 6 + 6}s ease-in-out infinite`,
             animationDelay: `${Math.random() * 6}s`
           }}
         />
-      )
+      );
     })}
   </div>
 
-  <div className="relative z-10 max-w-4xl">
-    <h1 className={`text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-blue-500 via-black-200 to-blue-500 bg-clip-text text-transparent animate-pulseGlow`}>
+  {/* Content */}
+  <div className="relative z-10 max-w-4xl w-full">
+    <h1 className="text-5xl md:text-7xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-pink-400 to-purple-600 animate-glowText">
       D U VAMSHI
     </h1>
-    <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-gray-100 dark:text-blue-200">
+    <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-gray-400 dark:text-blue-300">
       UI/UX Designer & Developer
     </h2>
-    <p className="max-w-2xl mx-auto text-lg md:text-xl mb-12 text-gray-300 dark:text-gray-400">
+    <p className="max-w-2xl mx-auto text-lg md:text-xl mb-12 text-gray-500 dark:text-gray-300">
       Creating secure, interactive, and user-friendly digital experiences that delight users and drive business results.
     </p>
 
     {/* Marquee */}
-    <div className={`w-full overflow-hidden py-3 border-y-2 ${darkMode ? 'border-blue-400' : 'border-blue-500'} my-8`}>
-      <div className="inline-block whitespace-nowrap animate-marquee">
+    <div className={`w-full overflow-hidden py-3 border-y-2 my-8 group ${
+      darkMode ? 'border-blue-400' : 'border-blue-500'
+    }`}>
+      <div className="inline-block whitespace-nowrap animate-marquee group-hover:paused">
         {['SECURE', 'INTERACTIVE', 'USER FRIENDLY', 'RESPONSIVE', 'ACCESSIBLE', 'INNOVATIVE'].map((word, i) => (
-          <span key={i} className={`mx-8 text-xl font-bold ${darkMode ? 'text-blue-300' : 'text-blue-500'}`}>
+          <span key={i} className={`mx-8 text-xl font-bold tracking-widest ${
+            darkMode ? 'text-blue-300' : 'text-blue-500'
+          }`}>
             {word}
           </span>
         ))}
@@ -299,28 +370,35 @@ export default function Portfolio() {
     <div className="w-full flex justify-center gap-4 flex-wrap mt-12">
       <button 
         onClick={() => handleScrollTo('projects')}
-        className={`px-8 py-3 rounded-full font-bold transition-all duration-300 ease-in-out
-          hover:scale-105 hover:shadow-lg
-          ${darkMode 
+        className={`px-8 py-3 rounded-full font-bold transition-all duration-300 ease-in-out transform hover:scale-110 hover:shadow-xl ${
+          darkMode 
             ? 'bg-gradient-to-r from-blue-700 to-teal-500 text-white hover:from-blue-600 hover:to-teal-400' 
-            : 'bg-gradient-to-r from-blue-500 to-teal-400 text-white hover:from-blue-600 hover:to-teal-500'}`}
+            : 'bg-gradient-to-r from-blue-500 to-teal-400 text-white hover:from-blue-600 hover:to-teal-500'
+        }`}
       >
-        View My Work
+        🚀 View My Work
       </button>
 
       <button 
         onClick={() => handleScrollTo('contact')}
-        className={`px-8 py-3 rounded-full font-bold transition-all duration-300 ease-in-out border-2
-          hover:scale-105 hover:shadow-lg
-          ${darkMode 
+        className={`px-8 py-3 rounded-full font-bold transition-all duration-300 ease-in-out transform border-2 hover:scale-110 hover:shadow-xl ${
+          darkMode 
             ? 'border-blue-400 text-blue-300 hover:bg-blue-900/50 hover:text-white' 
-            : 'border-blue-500 text-blue-600 hover:bg-blue-600 hover:text-white'}`}
+            : 'border-blue-500 text-blue-600 hover:bg-blue-600 hover:text-white'
+        }`}
       >
-        Contact Me
+        ✉️ Contact Me
       </button>
+    </div>
+
+    {/* Scroll Down Cue */}
+    <div className="mt-16 text-blue-400 dark:text-blue-300 animate-bounce text-3xl">
+      ↓
     </div>
   </div>
 </section>
+
+
 
 
       {/* Projects Section */}
