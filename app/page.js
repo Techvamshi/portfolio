@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from 'next/image';
-import Hero from "@/components/Hero";
+
 
 
 export const projects = [
